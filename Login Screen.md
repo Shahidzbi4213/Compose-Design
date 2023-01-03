@@ -1,7 +1,5 @@
 # Create Login Screen in Jetpack Compose
 
-# Environment
-N/A
 
 
 ```
