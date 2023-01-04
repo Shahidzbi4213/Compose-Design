@@ -80,7 +80,7 @@ import java.util.*
 fun SignUp(modifier: Modifier = Modifier, viewModel: MainViewModel?) {
 
     //Get Country Here
-    val country = viewModel!!.country.collectAsState()
+    val country by viewModel!!.country
 
     var name by remember {
         mutableStateOf("")
@@ -255,7 +255,7 @@ fun MyAutoCompleteTextView(viewModel: MainViewModel) {
 fun DatePickerField(
     viewModel: MainViewModel, modifier: Modifier = Modifier
 ) {
-    val dob = viewModel.dob.collectAsState().value ?: ""
+       val dob by viewModel.dob ?: ""
     val calendar = Calendar.getInstance()
     val dialog = DatePickerDialog(
         LocalContext.current,
@@ -314,19 +314,21 @@ import kotlinx.coroutines.launch
 
 class MainViewModel : ViewModel() {
 
-    private val _country = MutableStateFlow<String?>(null)
-    val country: StateFlow<String?> get() = _country
-
-    private val _showDialog = MutableStateFlow<Boolean>(false)
-    val showDialog: StateFlow<Boolean> get() = _showDialog
-
-    private val _dob = MutableStateFlow<String?>(null)
-    val dob: StateFlow<String?> get() = _dob
+    private var _country = mutableStateOf<String?>(null)
+    val country: State<String?> get() = _country
 
 
-    fun updateCountry(text: String?) = viewModelScope.launch { _country.emit(text) }
+    private val _dob = mutableStateOf<String?>(null)
+    val dob: State<String?> get() = _dob
 
-    fun updateDob(text: String) = viewModelScope.launch { _dob.emit(text) }
+
+    fun updateCountry(text: String?) {
+        _country.value = text
+    }
+
+    fun updateDob(text: String) {
+        _dob.value = text
+    }
 
 }
 ```
